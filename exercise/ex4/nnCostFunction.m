@@ -2,7 +2,7 @@ function [J grad] = nnCostFunction(nn_params, ...
                                    input_layer_size, ...
                                    hidden_layer_size, ...
                                    num_labels, ...
-                                   X, y, lambda)
+                                   X, Y, lambda)
 %NNCOSTFUNCTION Implements the neural network cost function for a two layer
 %neural network which performs classification
 %   [J grad] = NNCOSTFUNCTON(nn_params, hidden_layer_size, num_labels, ...
@@ -62,23 +62,34 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+for i =1:m
+    y = zeros(num_labels, 1) 
+    y(Y(i)) = 1
+
+    a1 = [ 1 ; X(i,:)']
+    z2 = Theta1 * a1
+    a2 = [ 1 ; sigmoid(z2) ]
+    z3 = Theta2 * a2
+    a3 = sigmoid(z3)
+
+    delta3 = a3 - y
+    delta2 = Theta2' * delta3 .* a2 .* (1 - a2)
+
+    grad1 = delta2(2:end,:) * a1'
+    grad2 = delta3 * a2'
+
+    Theta1_grad = Theta1_grad + grad1
+    Theta2_grad = Theta2_grad + grad2
 
 
+    l = - sum( y .* log(a3) + (1-y) .* log(1 - a3))
+    J = J + l 
+end
 
+J = J / m + lambda / (2*m) * ((sum(Theta1(: , 2:end)(:).^2) + sum(Theta2(: , 2:end)(:).^2)) )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Theta1_grad = ( Theta1_grad + lambda * [zeros(size(Theta1_grad,1),1) Theta1(:,2:end)])/m
+Theta2_grad = ( Theta2_grad + lambda * [zeros(size(Theta2_grad,1),1) Theta2(:,2:end)])/m
 
 % -------------------------------------------------------------
 
