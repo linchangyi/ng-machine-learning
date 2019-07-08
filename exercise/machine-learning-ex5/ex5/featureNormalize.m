@@ -5,6 +5,10 @@ function [X_norm, mu, sigma] = featureNormalize(X)
 %   is 1. This is often a good preprocessing step to do when
 %   working with learning algorithms.
 
+
+% 特征标准化 (x-u)/sigma  (特征值-平均数)/标准差
+
+
 mu = mean(X);
 X_norm = bsxfun(@minus, X, mu);
 

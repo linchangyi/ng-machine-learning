@@ -130,7 +130,7 @@ pause;
 %  complete polyFeatures to map each example into its powers
 %
 
-p = 8;
+p = 1;
 
 % Map X onto Polynomial Features and Normalize
 X_poly = polyFeatures(X, p);
